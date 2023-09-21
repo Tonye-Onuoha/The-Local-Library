@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-center">Author Details</h1>
+
+  <p class="mt-5"><strong>First Name:</strong> {{ author.first_name }}</p>
+  <p class="mt-5"><strong>Last Name:</strong> {{ author.last_name }}</p>
+  <p class="mt-5"><strong>Date of birth:</strong> {{ author.date_of_birth }}</p>
+  <p class="mt-5"><strong>Date of death:</strong> {{ author.date_of_death }}</p>
+
+  <div class="border rounded mt-3">
+    <h2 class="text-center">--Books--</h2>
+    <ul class="list-unstyled list-inline ">
+      {% for books in author.book_set.all %}
+      <li class="list-inline-item mt-5 ms-3">{{ books }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock %}

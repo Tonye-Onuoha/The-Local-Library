@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    {% block title %}
+      <title>Local Library</title>
+    {% endblock %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'bootstrap-5.3.2/css/bootstrap.css' %}">
+    <!-- Add additional CSS in static file -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  </head>
+  <body>
+    <header class="bg-secondary">
+      Local Library
+    </header>
+    <main>
+      <!-- Nav Section -->
+      {% if user.is_authenticated %}
+      <div class="nav-content bg-dark">
+        <a id="home" href="{% url 'index' %}">Home</a>
+        <a id="books" href="{% url 'books' %}">Books</a>
+        <a href="{% url 'authors' %}">Authors</a>
+        <a href="#">Genres</a>
+        <a href="#">Copies</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      </div>
+      {% else %}
+      <div class="text-white text-center bg-dark" style="padding:10px;margin-top:2px;">You are not currently logged into an account. To continue, please sign in or register to create an account.</div>
+      {% endif %}
+      <!--Content Section-->
+        {% block content %}
+        {% endblock %}
+      <!--Pagination Section-->
+      {% block pagination %}
+      {% if is_paginated %}
+      <div class="pagination text-center">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+      </div>
+      {% endif %}
+      {% endblock pagination %}
+    </main>
+    <footer class="bg-dark">Local Library &copy; 2023</footer>
+  </body>
+</html>
