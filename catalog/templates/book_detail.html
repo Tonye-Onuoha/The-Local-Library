@@ -1,22 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Title: {{ book.title }}</h1>
-
-  <p><strong>Author:</strong> <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a></p>
-  <!-- author detail link not yet defined -->
-  <p><strong>Summary:</strong> {{ book.summary }}</p>
-  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-  <p><strong>Language:</strong> {{ book.language }}</p>
-  <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
-
-  <div style="margin-left:20px;margin-top:20px">
-    <h4>Copies</h4>
-
+<div class="book-detail" style="font-weight:300;">
+  <div class="book-info border" style="height:100%;box-sizing:border-box;">
+    <div class="cover" style="height:50%">
+      <img src="{{ book.cover.url }}" alt="{{ book.title }}" style="display:block;margin:0 auto;max-width:100%;max-height:100%;">
+    </div>
+    <div class="information text-center bg-dark text-white" style="height:50%">
+      <p><b>Title: </b>{{ book.title }}</p>
+      <p><b>Author: </b><a href="{% url 'author-detail' book.author.id %}">{{ book.author }}</a></p>
+      <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+      <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+    </div>
+  </div>
+  <div class="book-summary border p-3">
+    <h1 class="text-center mt-1">Synopsis</h1>
+    <div class="summary mt-3 p-4">
+      {{ book.summary }}
+    </div>
+  </div>
+  <div class="reviews border"></div>
+  <div class="copies border p-3">
+    <h1 class="text-info">Copies</h1>
     {% for copy in book.bookinstance_set.all %}
-      <hr />
-      <p
-        class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+    <hr>
+    <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
         {{ copy.get_status_display }}
       </p>
       {% if copy.status != 'a' %}
@@ -24,6 +32,7 @@
       {% endif %}
       <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
       <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
-    {% endfor %}
+      {% endfor %}
   </div>
+</div>
 {% endblock %}

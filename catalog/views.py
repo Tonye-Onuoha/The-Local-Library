@@ -66,7 +66,6 @@ def sign_up(request):
 class BookListView(LoginRequiredMixin,ListView):
     model = Book
     template_name = 'book_list.html'
-    paginate_by = 5
 
     def get_queryset(self):
         return Book.objects.all().order_by('title')

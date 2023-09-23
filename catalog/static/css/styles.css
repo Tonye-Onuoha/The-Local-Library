@@ -42,6 +42,80 @@ header {
 .logout {
   padding: 10.8%;
 }
+/* Book-List View */
+
+.booklist {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-column-gap: 5px;
+  grid-row-gap: 20px;
+  grid-template-areas:
+  "info books highest-rated"
+  "favorites books highest-rated";
+  width: 100%;
+}
+.info {
+  grid-area: info;
+  background-color: #C1C2AD;
+  outline: 1px solid grey;
+  border-radius: 3px;
+}
+.books {
+  grid-area: books;
+  display: grid;
+  grid-template-columns: repeat(3,auto);
+  grid-auto-rows: 400px;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+.book-item:hover {
+  outline: 1px solid #B1B1B1;
+}
+.book-cover > img:hover {
+  cursor: pointer;
+}
+.favorites {
+  grid-area: favorites;
+  background-color: #FDB750;
+  outline: 1px solid grey;
+  border-radius: 3px;
+}
+.highest-rated {
+  grid-area: highest-rated;
+  background-color: lightgreen;
+  outline: 1px solid grey;
+  border-radius: 3px;
+}
+
+/* Book-Detail View */
+.book-detail {
+  display: grid;
+  grid-template-columns: 2fr 1fr 3fr;
+  grid-template-rows: 600px auto;
+  grid-gap: 5px;
+  grid-template-areas:
+  "book-info book-summary book-summary"
+  "reviews reviews copies";
+}
+.book-info {
+  grid-area: book-info;
+}
+.book-info > .information {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.book-summary {
+  grid-area: book-summary;
+}
+.reviews {
+  grid-area: reviews;
+}
+.copies {
+  grid-area: copies;
+}
+
 footer {
   padding: 20px;
   color: white;
