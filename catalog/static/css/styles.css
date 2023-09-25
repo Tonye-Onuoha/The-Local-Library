@@ -51,12 +51,17 @@ header {
   grid-column-gap: 5px;
   grid-row-gap: 20px;
   grid-template-areas:
-  "info books highest-rated"
+  "user books highest-rated"
   "favorites books highest-rated";
   width: 100%;
 }
-.info {
-  grid-area: info;
+.booklist-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.user {
+  grid-area: user;
   background-color: #C1C2AD;
   outline: 1px solid grey;
   border-radius: 3px;
@@ -104,13 +109,19 @@ header {
 .book-info > .information {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 .book-summary {
   grid-area: book-summary;
 }
 .reviews {
   grid-area: reviews;
+  display: grid;
+  grid-template-rows: auto 800px;
+  grid-auto-columns: 1fr;
+}
+.review-section {
+  overflow: auto;
 }
 .copies {
   grid-area: copies;

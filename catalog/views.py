@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Book, Author, BookInstance, Genre
+from .models import Book, Author, BookInstance, Genre, BookReview
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from catalog.forms import RenewBookForm
+from catalog.forms import RenewBookForm, BookReviewForm
 from django.urls import reverse, reverse_lazy
 import datetime
 
@@ -70,11 +70,24 @@ class BookListView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return Book.objects.all().order_by('title')
 
+@login_required
+def book_detail(request,pk):
+    book = Book.objects.get(id=pk)
+    if request.method == 'POST':
+        form = BookReviewForm(request.POST)
+        if form.is_valid():
+            review = form.cleaned_data['review']
+            user = request.user
+            BookReview.objects.create(review=review,book=book,user=user)
+            form = BookReviewForm()
+            context = {'book':book,'form':form}
+    else:
+        form = BookReviewForm()
+        context = {'book':book,'form':form}
 
-class BookDetailView(LoginRequiredMixin,DetailView):
-    model = Book
-    template_name = 'book_detail.html'
-    context_object_name = 'book'
+    return render(request,'book_detail.html',context=context)
+
+
 
 
 class AuthorListView(LoginRequiredMixin,ListView):

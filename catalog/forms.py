@@ -2,6 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import datetime
+from .models import BookReview
 
 class RenewBookForm(forms.Form):
     renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
@@ -19,3 +20,6 @@ class RenewBookForm(forms.Form):
 
         # Remember to always return the cleaned data.
         return data
+
+class BookReviewForm(forms.Form):
+    review = forms.CharField(widget=forms.Textarea(),help_text='Please kindly leave a review',label="",max_length=150)

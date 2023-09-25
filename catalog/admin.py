@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, BookInstance, Author, Genre
+from .models import Book, BookInstance, Author, Genre, BookReview
 
 # Register your models here.
 #admin.site.register(Book)
@@ -39,9 +39,14 @@ class AuthorAdmin(admin.ModelAdmin):
     fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
     inlines = [BookInline]
 
+class BookReviewAdmin(admin.ModelAdmin):
+    list_display = ('review', 'book', 'date', 'user')
+    list_filter = ('book',)
+
 
 
 admin.site.register(Book,BookAdmin)
 admin.site.register(BookInstance,BookInstanceAdmin)
 admin.site.register(Author,AuthorAdmin)
+admin.site.register(BookReview, BookReviewAdmin)
 admin.site.register(Genre)

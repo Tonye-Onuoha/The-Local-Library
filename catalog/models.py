@@ -106,3 +106,16 @@ class Author(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
+
+class BookReview(models.Model):
+    review = models.TextField(help_text='Please kindly leave a review',max_length=150,blank=False)
+    book = models.ForeignKey(Book,on_delete=models.CASCADE,blank=False)
+    date = models.DateTimeField(blank=False,auto_now_add=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=False)
+
+    class Meta:
+        ordering = ['-date']
+
+    def get_absolute_url(self):
+        """Returns a particular review of a book"""
+        return reverse('reviews', args=[str(self.id)])
