@@ -1,14 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Author List</h1>
-    <ul>
+<div class="container border rounded">
+  <h1 class="text-center mt-3 mb-0" style="font-variant:small-caps;">Authors</h1>
+  <hr>
+  <div class="author-list">
     {% for author in object_list %}
-      <li>
-        <a href="{{ author.get_absolute_url }}">{{ author }}</a>
-      </li>
-    {% empty %}
-    <p>There are no other authors in this library.</p>
+    <a href="{{ author.get_absolute_url }}" style="display:block;text-decoration:none;">
+      <div class="author border" style="height:100%;max-width:100%;max-height:100%;">
+        <div class="author-image" style="height:60%;">
+          <img src="{{ author.image.url }}" alt="{{ author }}" style="max-width:100%;max-height:100%;display:block;margin:0 auto;">
+        </div>
+        <div class="bg-dark" style="height:40%;display:flex;align-items:center;justify-content:center;">
+          <p class="text-white text-center">{{ author }}</p>
+        </div>
+      </div>
+    </a>
     {% endfor %}
-    </ul>
+  </div>
+</div>
 {% endblock %}

@@ -77,9 +77,6 @@ header {
 .book-item:hover {
   outline: 1px solid #B1B1B1;
 }
-.book-cover > img:hover {
-  cursor: pointer;
-}
 .favorites {
   grid-area: favorites;
   background-color: #FDB750;
@@ -125,6 +122,15 @@ header {
 }
 .copies {
   grid-area: copies;
+}
+
+/* Author-List View */
+.author-list {
+  display: grid;
+  grid-template-columns: repeat(3, 33.33%);
+  grid-template-rows: repeat(4, 360px);
+  grid-auto-rows: 360px;
+  grid-gap: 5px;
 }
 
 footer {
