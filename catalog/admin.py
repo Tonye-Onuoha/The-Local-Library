@@ -36,7 +36,7 @@ class BookInstanceAdmin(admin.ModelAdmin):
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')
     # Defines the order of the fields and how they are laid out (tuple:horizontal,no tuple:vertical) in the detail view
-    fields = ['first_name', 'last_name', ('date_of_birth', 'date_of_death')]
+    fields = ['first_name', 'last_name', 'image', 'biography', ('date_of_birth', 'date_of_death')]
     inlines = [BookInline]
 
 class BookReviewAdmin(admin.ModelAdmin):

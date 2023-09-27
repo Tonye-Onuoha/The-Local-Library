@@ -117,6 +117,16 @@ class AuthorDelete(DeleteView):
     template_name = 'author_confirm_delete.html'
     success_url = reverse_lazy('authors')
 
+def review_delete(request,pk):
+    review = get_object_or_404(BookReview, id=pk)
+    if request.method == 'POST':
+        review.delete()
+        return redirect('books')
+    else:
+        context = {'post':review}
+
+    return render(request, 'review_delete.html',context=context)
+
 
 class LoanedBooksByUserListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     """Generic class-based view listing books on loan to current user."""
