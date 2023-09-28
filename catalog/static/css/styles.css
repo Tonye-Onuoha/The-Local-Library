@@ -133,6 +133,28 @@ header {
   grid-gap: 5px;
 }
 
+/* Author Details Page */
+.author-details {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: 60% auto;
+  grid-gap: 5px;
+  grid-template-areas:
+  "author-info author-bio"
+  "author-books author-books";
+}
+.author-info {
+  grid-area: author-info
+}
+.author-bio {
+  grid-area: author-bio;
+  display: grid;
+  grid-template-rows: 20% 80%;
+}
+.author-books {
+  grid-area: author-books;
+}
+
 footer {
   padding: 20px;
   color: white;
