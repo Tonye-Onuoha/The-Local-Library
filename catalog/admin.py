@@ -20,7 +20,7 @@ class BookAdmin(admin.ModelAdmin):
     # fieldsets attribute is used to divide the model detail view into sections
     fieldsets = (
             (
-            None,{'fields':('title', 'author', 'cover')})
+            None,{'fields':('title', 'author', 'cover', 'isbn')})
             ,
             (
             'Details',{'fields':('genre','summary')})

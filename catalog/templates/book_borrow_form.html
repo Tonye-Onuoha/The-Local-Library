@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container border p-5">
+  <h1 class="text-center display-4">Borrow A Book</h1>
+  <div class="borrow-form p-3">
+    <form class="" action="" method="POST">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input id="saga" type="submit" value="Submit" onclick="color(this)" class="">
+    </form>
+  </div>
+</div>
+{% endblock content %}

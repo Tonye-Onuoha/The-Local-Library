@@ -6,6 +6,13 @@
 
 {% block content %}
 <div class="container p-5">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} text-center p-1">
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
   <h2 class="text-center">Local Library Home</h2>
   <p class="text-center">
     Welcome to LocalLibrary, a website developed by

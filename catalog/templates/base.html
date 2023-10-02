@@ -11,8 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'bootstrap-5.3.2/css/bootstrap.css' %}">
-    <!-- Add additional CSS in static file -->
+    <!-- Add additional CSS and JS in static file -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <script src="{% static 'js/library.js' %}" defer></script>
   </head>
   <body>
     <header class="bg-secondary">
@@ -25,9 +26,9 @@
         <a id="home" href="{% url 'index' %}">Home</a>
         <a id="books" href="{% url 'books' %}">Books</a>
         <a href="{% url 'authors' %}">Authors</a>
-        <a href="#">Genres</a>
+        <a href="{% url 'genres' %}">Genres</a>
         <a href="#">Copies</a>
-        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
       </div>
       {% else %}
       <div class="text-white text-center bg-dark" style="padding:10px;margin-top:2px;">You are not currently logged into an account. To continue, please sign in or register to create an account.</div>

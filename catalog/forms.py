@@ -23,3 +23,18 @@ class RenewBookForm(forms.Form):
 
 class BookReviewForm(forms.Form):
     review = forms.CharField(widget=forms.Textarea(),help_text='Please kindly leave a review',label="",max_length=150)
+
+class BookBorrowForm(forms.Form):
+    book = forms.CharField(help_text='Enter a book',widget=forms.TextInput(attrs={"onkeyup":"hint(this)"}))
+    return_date = forms.DateField(help_text='Enter the date to be returned')
+
+    def clean_return_date(self):
+        data = self.cleaned_data['return_date']
+
+        if data > datetime.date.today() + datetime.timedelta(weeks=4):
+            raise ValidationError(_('The return date is too far, it should not pass a month'))
+
+        if data < datetime.date.today():
+            raise ValidationError(_('The date you entered has already passed'))
+
+        return data

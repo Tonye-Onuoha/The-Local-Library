@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container p-3">
+  <h2 class="text-center display-6">{{ object.name }} Books</h2>
+  <hr>
+  <div class="border rounded p-5">
+    <ul>
+      {% for book in genre.book_set.all %}
+      <li><a href="{{ book.get_absolute_url }}">{{ book }}</a></li>
+      {% empty %}
+      <p>There are no books in this particular genre.</p>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock content %}

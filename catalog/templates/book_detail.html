@@ -5,7 +5,7 @@
 {% block content %}
 <div class="book-detail" style="font-weight:300;">
   <div class="book-info border" style="height:100%;box-sizing:border-box;">
-    <div class="cover" style="height:50%">
+    <div class="cover p-1" style="height:50%">
       <img src="{{ book.cover.url }}" alt="{{ book.title }}" style="display:block;margin:0 auto;max-width:100%;max-height:100%;">
     </div>
     <div class="information text-center bg-dark text-white" style="height:50%">
@@ -13,6 +13,7 @@
       <p><b>Author: </b><a href="{% url 'author-detail' book.author.id %}">{{ book.author }}</a></p>
       <p><strong>ISBN:</strong> {{ book.isbn }}</p>
       <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+      <p><mark><b><a href="{% url 'book-borrow' book.id %}" class="text-success text-lg">Click to borrow</a></b></mark></p>
     </div>
   </div>
   <div class="book-summary border p-3">
@@ -54,8 +55,8 @@
     {% for copy in book.bookinstance_set.all %}
     <hr>
     <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
-        {{ copy.get_status_display }}
-      </p>
+        {{ copy.get_status_display }}: {% if copy.status == 'o' %}<span>{{ copy.borrower }}</span>{% endif %}</p>
+
       {% if copy.status != 'a' %}
         <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
       {% endif %}
@@ -64,4 +65,4 @@
       {% endfor %}
   </div>
 </div>
-{% endblock %}
+{% endblock content %}

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from catalog.forms import RenewBookForm, BookReviewForm
+from catalog.forms import RenewBookForm, BookReviewForm, BookBorrowForm
 from django.urls import reverse, reverse_lazy
 import datetime
 
@@ -127,6 +127,13 @@ def review_delete(request,pk):
 
     return render(request, 'review_delete.html',context=context)
 
+class GenreListView(LoginRequiredMixin, ListView):
+    model = Genre
+    template_name = 'genre_list.html'
+
+class GenreDetailView(LoginRequiredMixin, DetailView):
+    model = Genre
+    template_name = 'genre_detail.html'
 
 class LoanedBooksByUserListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     """Generic class-based view listing books on loan to current user."""
@@ -183,3 +190,51 @@ def renew_book_librarian(request, pk):
     }
 
     return render(request, 'book_renew_librarian.html', context)
+
+@login_required
+@permission_required('catalog.can_mark_returned', raise_exception=True)
+def book_borrow(request,pk):
+    book = Book.objects.get(id=pk)
+    message = None
+    collection = None
+    if request.method == 'POST':
+        count = 0
+        for books in BookInstance.objects.filter(status__exact='o'):
+            if books.borrower == request.user:
+                count += 1
+        if count == 3:
+            message = "You have already reached your borrowing limit - **3 books**"
+            warning = "limit"
+        else:
+            collection = []
+            for books in BookInstance.objects.filter(status__exact='o'):
+                if books.borrower == request.user and books.is_overdue:
+                    collection.append(books)
+            if collection:
+                message = "You are yet to return the following books:"
+                warning = "books_due"
+            else:
+                form = BookBorrowForm(request.POST)
+                if form.is_valid():
+                    bookinstance = BookInstance.objects.filter(book__title=book.title).filter(status__exact='a').first()
+                    bookinstance.due_back = form.cleaned_data['return_date']
+                    bookinstance.borrower = request.user
+                    bookinstance.status = 'o'
+                    bookinstance.save()
+                    messages.success(request,f'You have successfully borrowed {bookinstance.book.title}')
+                    return redirect('index')
+                else:
+                    context = {'form':form}
+    else:
+        form = BookBorrowForm(initial={'book':book.title})
+        context={'form':form}
+
+
+    if collection:
+        context = {'message':message,'warning':warning,'collection':collection}
+        return render(request, 'borrow_unallowed.html', context)
+    elif message:
+        context = {'message':message,'warning':warning}
+        return render(request, 'borrow_unallowed.html', context)
+
+    return render(request, 'book_borrow_form.html', context=context)

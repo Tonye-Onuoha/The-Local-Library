@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container p-2">
+  <h1 class="display-6 text-center">Genres</h1>
+  <hr>
+  <div class="border rounded p-2 mb-2">
+    <ul>
+      {% for genre in genre_list %}
+      <li><a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a></li>
+      {% empty %}
+      <p>There are no more genres available.</p>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock content %}

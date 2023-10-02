@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container p-5 mt-5 mb-5">
+  {% if warning == 'limit' %}
+  <h1 class="text-center">Borrow Limit Reached</h1>
+  {% else %}
+  <h1 class="text-center">Book Loan Expired</h1>
+  {% endif %}
+  <div class="message p-5 border rounded">
+    {% if collection %}
+    <p> {{ message }}</p>
+    <ul>
+      {% for item in collection %}
+      <br>
+      <li>{{ item.book }}</li>
+      {% endfor %}
+    </ul>
+    <br>
+    <p><strong>Note: You cannot borrow any more books until the book(s) mentioned above has/have been returned.</strong></p>
+    {% else %}
+    <p class="text-center">{{ message }}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

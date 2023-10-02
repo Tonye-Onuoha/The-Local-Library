@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="author-details">
+<div class="author-details" style="line-height:1.4;">
   <div class="author-info border">
-    <div class="author-image p-1" style="height:70%;">
+    <div class="author-image" style="height:60%;">
       <img src="{{ author.image.url }}" alt="{{ author }}" style="max-width:100%;max-height:100%;display:block;margin:0 auto;">
     </div>
-    <div class="info bg-dark text-white" style="height:30%;display:flex;flex-direction:column;justify-content:space-around;align-items:center;">
+    <div class="info bg-dark text-white" style="height:40%;display:flex;flex-direction:column;justify-content:space-around;align-items:center;">
       <p class="mt-3"><strong>Name:</strong> {{ author }}</p>
       <p><strong>Date of birth:</strong> {{ author.date_of_birth }}</p>
       {% if author.date_of_death %}
@@ -22,6 +22,19 @@
       {{ author.biography }}
     </div>
   </div>
-  <div class="author-books border"></div>
+  <div class="author-books border">
+    {% for book in author.book_set.all %}
+    <a href="{{ book.get_absolute_url }}" class="border" style="display:block;text-decoration:none;">
+      <div class="books-authored" style="height:100%;">
+        <div class="cover" style="height:80%;">
+          <img src="{{ book.cover.url }}" alt="{{ book.title }}" style="max-width:100%;max-height:100%;display:block;margin:0 auto;">
+        </div>
+        <div class="name bg-secondary text-white p-2" style="height:20%;display:flex;justify-content:center;align-items:center;">
+          <p class="text-center m-0">{{ book }}</p>
+        </div>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
 </div>
-{% endblock %}
+{% endblock content %}
