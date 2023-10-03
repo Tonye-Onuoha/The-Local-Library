@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <h1 class="display-6 mt-2 text-center">Copies</h1>
+  <div class="border rounded p-3">
+    {% for copy in bookinstance_list %}
+    <hr>
+    <div class="">
+      <p><strong>Title : </strong><a href="{{ copy.book.get_absolute_url }}">{{ copy.book }}</a></p>
+      <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+        {% if copy.status == 'a' %}
+        {{ copy.get_status_display }}
+        {% elif copy.status == 'o' or copy.status == 'r'  %}
+        {{ copy.get_status_display }} : <span>{{ copy.borrower }}</span></p>
+        {% endif %}
+
+        {% if copy.status != 'a' %}
+          <p><strong>Due to be returned :</strong> {{ copy.due_back }}</p>
+        {% endif %}
+        <p><strong>Imprint :</strong> {{ copy.imprint }}</p>
+        <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

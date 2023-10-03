@@ -2,13 +2,39 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container border p-5">
+<div class="container p-2">
   <h1 class="text-center display-4">Borrow A Book</h1>
   <div class="borrow-form p-3">
-    <form class="" action="" method="POST">
+    <form class="border rounded p-5" action="" method="POST" style="font-weight:300;">
       {% csrf_token %}
-      {{ form|crispy }}
-      <input id="saga" type="submit" value="Submit" onclick="color(this)" class="">
+      {{ form.book.label }}
+      {{ form.book }}
+      <p>{{ form.book.help_text }}</p>
+      {% if form.book.errors %}
+      <ul class="list-unstyled">
+        {% for error in form.book.errors %}
+        <li class="text-danger">{{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {{ form.return_date.label }}
+      {{ form.return_date}}
+      <p>{{ form.return_date.help_text }}</p>
+      {% if form.return_date.errors %}
+      <ul class="list-unstyled">
+        {% for error in form.return_date.errors %}
+        <li class="text-danger">{{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <span>{{ form.action.label }}</span>
+      <span class="radio-buttons ms-4 mb-3" style="">
+        {% for radio in form.action %}
+        <span style="display:inline-block;width:20%;">{{ radio }}</span>
+        {% endfor %}
+      </span>
+      <br>
+      <input type="submit" value="Submit"  class="btn text-white mt-5" style="background-color:#32CD30;">
     </form>
   </div>
 </div>

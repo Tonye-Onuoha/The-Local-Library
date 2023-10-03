@@ -23,11 +23,11 @@
       <!-- Nav Section -->
       {% if user.is_authenticated %}
       <div class="nav-content bg-dark">
-        <a id="home" href="{% url 'index' %}">Home</a>
+        <a class="bg-primary" style="outline:1px solid white;" href="{% url 'index' %}">Home</a>
         <a id="books" href="{% url 'books' %}">Books</a>
         <a href="{% url 'authors' %}">Authors</a>
         <a href="{% url 'genres' %}">Genres</a>
-        <a href="#">Copies</a>
+        <a href="{% url 'copies' %}">Copies</a>
         <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
       </div>
       {% else %}

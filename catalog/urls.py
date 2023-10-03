@@ -19,4 +19,5 @@ urlpatterns = [
     path('review/<int:pk>', views.review_delete, name='review-delete'),
     path('genres/', views.GenreListView.as_view(), name='genres'),
     path('genres/<int:pk>/', views.GenreDetailView.as_view(), name='genre-detail'),
+    path('copies/', views.CopyListView.as_view(), name='copies'),
 ]

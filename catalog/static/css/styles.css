@@ -35,6 +35,7 @@ header {
 .nav-content a:hover:not(#home) {
   background-color: dimgray;
   outline: 1px solid white;
+  color: white;
 }
 .login {
   padding: 5%;
@@ -123,6 +124,13 @@ header {
 .copies {
   grid-area: copies;
 }
+.borrow-form-field {
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #9FA6B2;
+  border-radius: 5px;
+  font-weight: 300;
+}
 
 /* Author-List View */
 .author-list {
@@ -135,7 +143,6 @@ header {
 
 /* Author Details Page */
 .author-details {
-  outline: 1px solid red;
   display: grid;
   grid-template-columns: 1fr 3fr;
   grid-template-rows: 400px auto;

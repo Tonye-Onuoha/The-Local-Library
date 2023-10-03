@@ -7,7 +7,7 @@
   <div class="border rounded p-2 mb-2">
     <ul>
       {% for genre in genre_list %}
-      <li><a href="{{ genre.get_absolute_url }}">{{ genre.name }}</a></li>
+      <li><a href="{{ genre.get_absolute_url }}" class="mb-3">{{ genre.name }}</a></li>
       {% empty %}
       <p>There are no more genres available.</p>
       {% endfor %}

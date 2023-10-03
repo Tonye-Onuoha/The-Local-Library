@@ -13,7 +13,7 @@
       <p><b>Author: </b><a href="{% url 'author-detail' book.author.id %}">{{ book.author }}</a></p>
       <p><strong>ISBN:</strong> {{ book.isbn }}</p>
       <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
-      <p><mark><b><a href="{% url 'book-borrow' book.id %}" class="text-success text-lg">Click to borrow</a></b></mark></p>
+      <p><mark><b><a href="{% url 'book-borrow' book.id %}" class="text-success text-lg">Click to borrow/reserve</a></b></mark></p>
     </div>
   </div>
   <div class="book-summary border p-3">
@@ -55,7 +55,11 @@
     {% for copy in book.bookinstance_set.all %}
     <hr>
     <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
-        {{ copy.get_status_display }}: {% if copy.status == 'o' %}<span>{{ copy.borrower }}</span>{% endif %}</p>
+      {% if copy.status == 'a' %}
+      {{ copy.get_status_display }}
+      {% elif copy.status == 'o' or copy.status == 'r'  %}
+      {{ copy.get_status_display }} : <span>{{ copy.borrower }}</span></p>
+      {% endif %}
 
       {% if copy.status != 'a' %}
         <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>

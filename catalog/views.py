@@ -135,6 +135,10 @@ class GenreDetailView(LoginRequiredMixin, DetailView):
     model = Genre
     template_name = 'genre_detail.html'
 
+class CopyListView(LoginRequiredMixin, ListView):
+    model = BookInstance
+    template_name = 'copy_list.html'
+
 class LoanedBooksByUserListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
@@ -151,7 +155,7 @@ class LoanedBooksByUserListView(LoginRequiredMixin,PermissionRequiredMixin,ListV
 
 class LoanedBooksByLibrariansListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
     model = BookInstance
-    template_name = 'librarians.html'
+    template_name = 'librarians_all_books.html'
     permission_required = 'catalog.can_mark_returned'
 
     def get_queryset(self):
@@ -216,12 +220,20 @@ def book_borrow(request,pk):
             else:
                 form = BookBorrowForm(request.POST)
                 if form.is_valid():
+                    action = form.cleaned_data['action']
                     bookinstance = BookInstance.objects.filter(book__title=book.title).filter(status__exact='a').first()
-                    bookinstance.due_back = form.cleaned_data['return_date']
-                    bookinstance.borrower = request.user
-                    bookinstance.status = 'o'
+                    if action == 'borrow':
+                        bookinstance.due_back = form.cleaned_data['return_date']
+                        bookinstance.borrower = request.user
+                        bookinstance.status = 'o'
+                    elif action == 'reserve':
+                        bookinstance.borrower = request.user
+                        bookinstance.status = 'r'
                     bookinstance.save()
-                    messages.success(request,f'You have successfully borrowed {bookinstance.book.title}')
+                    if action == 'borrow':
+                        messages.success(request,f'You have successfully borrowed a copy of "{bookinstance.book.title}"')
+                    else:
+                        messages.success(request,f'You have successfully reserved a copy of "{bookinstance.book.title}"')
                     return redirect('index')
                 else:
                     context = {'form':form}
