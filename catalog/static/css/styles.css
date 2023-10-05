@@ -32,6 +32,9 @@ header {
   background-color: #004369;
   outline: 1px solid white;
 }
+a:link {
+  text-decoration: none;
+}
 .nav-content a:hover:not(#home) {
   background-color: dimgray;
   outline: 1px solid white;
@@ -63,9 +66,16 @@ header {
 }
 .user {
   grid-area: user;
-  background-color: #C1C2AD;
-  outline: 1px solid grey;
-  border-radius: 3px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 50% 50%;
+}
+.booklist .user-section div > a {
+  padding: 12px;
+}
+.booklist .user-section div > a:hover {
+  background-color: #212121;
+  outline: 1px solid white;
 }
 .books {
   grid-area: books;
@@ -87,8 +97,6 @@ header {
 .highest-rated {
   grid-area: highest-rated;
   background-color: lightgreen;
-  outline: 1px solid grey;
-  border-radius: 3px;
 }
 
 /* Book-Detail View */
