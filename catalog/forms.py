@@ -27,7 +27,7 @@ class BookReviewForm(forms.Form):
 class BookBorrowForm(forms.Form):
     CHOICES = (('borrow','Borrow a book'),('reserve','Reserve a book'))
     book = forms.CharField(help_text='Enter a book',widget=forms.TextInput(attrs={'class':'borrow-form-field mb-4 p-1'}))
-    return_date = forms.DateField(help_text='Enter the date to be returned',widget=forms.TextInput(attrs={'class':'borrow-form-field mb-4 p-1'}))
+    return_date = forms.DateField(help_text='Enter the date to be returned',widget=forms.TextInput(attrs={'class':'borrow-form-field mb-4 p-1','placeholder':'MM/DD/YY'}))
     action = forms.CharField(label="What do you want to do ?", widget=forms.RadioSelect(choices=CHOICES))
 
     def clean_return_date(self):

@@ -9,7 +9,7 @@
       {% for book in genre.book_set.all %}
       <li><a href="{{ book.get_absolute_url }}">{{ book }}</a></li>
       {% empty %}
-      <p>There are no books in this particular genre.</p>
+      <p class="text-center">There are no books in this particular genre.</p>
       {% endfor %}
     </ul>
   </div>

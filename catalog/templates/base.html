@@ -28,7 +28,7 @@
         <a href="{% url 'authors' %}">Authors</a>
         <a href="{% url 'genres' %}">Genres</a>
         <a href="{% url 'copies' %}">Copies</a>
-        <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
+        <a href="{% url 'logout' %}">Logout</a>
       </div>
       {% else %}
       <div class="text-white text-center bg-dark" style="padding:10px;margin-top:2px;">You are not currently logged into an account. To continue, please sign in or register to create an account.</div>
@@ -39,18 +39,25 @@
       <!--Pagination Section-->
       {% block pagination %}
       {% if is_paginated %}
-      <div class="pagination text-center">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
+      <div class="paginate p-2" style="display: flex;justify-content: center;">
+		  {% if page_obj.has_previous %}
+		  <a class="btn btn-outline-info" href="{{ request.path }}?page=1">First</a>
+		  <a class="btn btn-outline-info ms-2" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">Previous</a>
+          {% endif %}
+		  
+		  {% for num in page_obj.paginator.page_range %}
+		  	{% if page_obj.number == num %}
+		  	<a class="btn btn-info ms-2" href="{{ request.path }}?page={{ num }}">{{ num }}</a>
+		  	{% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3'  %}
+			<a class="btn btn-outline-info ms-2" href="{{ request.path }}?page={{ num }}">{{ num }}</a>
+		  	{% endif %}
+		  {% endfor %}
+		
+		  {% if page_obj.has_next %}
+		  <a class="btn btn-outline-info ms-2" href="{{ request.path }}?page={{ page_obj.next_page_number }}">Next</a>
+		  <a class="btn btn-outline-info ms-2" href="{{ request.path }}?page={{ page_obj.paginator.num_pages }}">Last</a>
+          {% endif %}
+                    
       </div>
       {% endif %}
       {% endblock pagination %}

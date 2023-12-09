@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container p-2">
+	<div class="border rounded" style="min-height: 400px;display: flex;justify-content: center;align-items: center;">
+		<form method="post">
+			{% csrf_token %}
+			<h2 class="text-center mt-5">Are you ready to return this book ?</h2>
+			<p class="text-center mt-5">"{{ book_instance.book.title }}"</p>
+			<div class="mt-5" style="display:flex;justify-content:space-around;">
+        	<input type="submit" name="submit" value="Yes" class="btn btn-info text-white" style="width: 60px;">
+        	<a href="{% url 'my-borrowed' %}" class="btn btn-secondary text-white" style="width: 60px;">No</a>
+      		</div>
+		</form>
+	</div>
+</div>
+{% endblock content %}

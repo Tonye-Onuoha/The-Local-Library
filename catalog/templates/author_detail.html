@@ -23,6 +23,10 @@
     </div>
   </div>
   <div class="author-books border">
+	<div style="grid-column-start: 1;grid-column-end: 6;">
+		<h2 class="text-center">{{ author.first_name }} {{ author.last_name }}'s books </h2>
+		<hr>
+	</div>
     {% for book in author.book_set.all %}
     <a href="{{ book.get_absolute_url }}" class="border" style="display:block;text-decoration:none;">
       <div class="books-authored" style="height:100%;">

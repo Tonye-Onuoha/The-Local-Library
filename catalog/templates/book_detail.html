@@ -36,7 +36,7 @@
       <div class="review">
         <hr>
         <div class="text-dark mb-4">{{ post.review }}</div>
-        <q cite="" style="display:block;" class="text-end text-info">{{ post.user }}</q>
+        <p class="text-end text-info">- {{ post.user }}</p>
         {% if post.user == user %}
         <div style="display:flex;justify-content:space-between;">
           <a href="{% url 'review-delete' post.id %}"><button type="button" name="button" class="btn btn-danger text-white">Delete</button></a>

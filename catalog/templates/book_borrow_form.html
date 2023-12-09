@@ -3,7 +3,14 @@
 
 {% block content %}
 <div class="container p-2">
-  <h1 class="text-center display-4">Borrow A Book</h1>
+	{% if messages %}
+  	{% for message in messages %}
+  	<div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-{{ message.tags }}{% endif %} text-center p-1">
+    {{ message }}
+  	</div>
+  	{% endfor %}
+  	{% endif %}
+  <h1 class="text-center display-4">Borrow/Reserve A Book</h1>
   <div class="borrow-form p-3">
     <form class="border rounded p-5" action="" method="POST" style="font-weight:300;">
       {% csrf_token %}

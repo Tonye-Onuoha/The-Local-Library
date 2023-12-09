@@ -3,22 +3,39 @@
 {% block content %}
 <div class="booklist mb-3" style="font-size:16px;">
   <div class="user" style="font-size: 20px;font-weight:400;">
-    <div class="user-section" style="display:flex;flex-direction:column;justify-content:space-evenly;background-color:dimgray;">
+    <div class="user-section border" style="display:flex;flex-direction:column;justify-content:space-evenly;background-color:dimgray;">
       {% if user.is_staff %}
       <div class="text-center text-light bg-dark" style="padding:13px;">Welcome, {{ user.get_username }}</div>
       <div class="text-center"><a href="{% url 'my-borrowed' %}" class="text-white" style="display:block;">My Books</a></div>
       <div class="text-center text-white"><a href="{% url 'all-borrowed' %}" class="text-white" style="display:block;">All borrowed books</a></div>
-      <div class="text-center"><a href="#" class="text-white" style="display:block;">Renew a book</a></div>
       {% elif perms.catalog.can_mark_returned %}
       <div class="text-center text-light bg-dark" style="padding:13px;">Welcome, {{ user.get_username }}</div>
       <div class="text-center"><a href="{% url 'my-borrowed' %}" class="text-white" style="display:block;">My Books</a></div>
       {% endif %}
     </div>
-    <div class="recently-borrowed">
-      Recently Borrowed
+	 {% if recently_borrowed %}
+    <div class="recently-borrowed border">
+		<div><h2 class="text-center text-dark" style="font-variant:small-caps; font-weight: 600;">Recently Borrowed</h2></div>
+		<a id="recent-book" href="{{ recently_borrowed.book.get_absolute_url }}" title="{{ recently_borrowed.book }}" style="display:block;width: 60%;max-width: 100%;max-height: 100%;">
+		<img src="{{ recently_borrowed.book.cover.url }}" alt="{{ recently_borrowed.book }}" class="" style="max-width: 100%;max-height: 100%;">
+	  	</a>
+		<div>
+		  <p class="text-center text-dark">{{ recently_borrowed.book.title}}</p>
+		  <p class="text-center text-dark">{{ recently_borrowed.book.author}}</p>
+		</div>
     </div>
+	  {% endif %}
   </div>
-  <div class="favorites"></div>
+  <div class="recommended border">
+	  <div><h2 class="text-center text-dark" style="font-variant:small-caps; font-weight: 600;">Recommended Book</h2></div>
+	  <a id="recommended-book" href="{{ recommended_book.get_absolute_url }}" title="{{ recommended_book }}" style="display: block;width: 90%;" >
+		  <img src="{{ recommended_book.cover.url }}" alt="{{ recommended_book }}" class="img-thumbnail" style="max-width: 100%;max-height: 100%;">
+	  </a>
+      <div>
+	  <p class="text-center text-dark">{{ recommended_book.title }}</p>
+	  <p class="text-center text-dark">{{ recommended_book.author }}</p>
+	  </div>
+  </div>
   <div class="books">
   {% if book_list %}
       {% for book in book_list %}
@@ -38,6 +55,27 @@
     <p>There are no books in the library.</p>
   {% endif %}
   </div>
-  <div class="highest-rated"></div>
+  <div class="highest-rated">
+    <div class="latest-book border">
+		<div><h2 class="text-center text-secondary" style="font-variant:small-caps; font-weight: 600;">Brand New</h2></div>
+		<a id="new-book" href="{{ latest_book.get_absolute_url }}" title="{{ latest_book }}" style="display: block;width: 90%;" >
+		  <img src="{{ latest_book.cover.url }}" alt="{{ latest_book }}" class="img-thumbnail"style="max-width: 100%;max-height: 100%;">
+	  	</a>
+		<div>
+		  <p class="text-center text-secondary">{{ latest_book.title}}</p>
+		  <p class="text-center text-secondary">{{ latest_book.author}}</p>
+		</div>
+    </div>
+    <div class="fan-favorite border">
+      <div><h2 class="text-center text-secondary" style="font-variant:small-caps; font-weight: 600;">Fan Favorite</h2></div>
+	  <a id="fav-book" href="{{ favorite.get_absolute_url }}" title="{{ favorite }}" style="display: block;width: 90%;" >
+		  <img src="{{ favorite.cover.url }}" alt="{{ favorite }}" class="img-thumbnail"style="max-width: 100%;max-height: 100%;">
+	  </a>
+    <div>
+	  <p class="text-center text-secondary">{{ favorite.title }}</p>
+	  <p class="text-center text-secondary">{{ favorite.author }}</p>
+	 </div>
+    </div>
+  </div>
 </div>
 {% endblock content %}

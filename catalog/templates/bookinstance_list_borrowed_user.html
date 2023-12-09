@@ -2,15 +2,22 @@
 
 {% block content %}
 <div class="container p-3 border">
+	{% if messages %}
+  	{% for message in messages %}
+  	<div class="alert alert-{{message.tags}} text-center p-1">
+    {{ message }}
+  	</div>
+  	{% endfor %}
+  	{% endif %}
   <h1 class="text-center mt-2 display-6">Borrowed books</h1>
-  <div class="border rounded mt-3 mb-3 p-4">
+  <div class="border rounded mt-3 mb-3 p-4" style="min-height: 300px;display: flex;justify-content: center;align-items: center;">
     {% if bookinstance_list %}
     <ul class="mt-5 mb-5 p-3" style="list-style-type: square;">
       {% for bookinst in bookinstance_list %}
       {% if perms.catalog.can_mark_returned %}
       <li class="{% if bookinst.is_overdue %}text-danger{% endif %} mb-3">
-        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> ({{ bookinst.due_back }})
-        {% if user.is_staff %}<span class="ms-2"><a href="{% url 'renew-book-librarian' bookinst.id %}">Renew</a></span>{% endif %}
+        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> - return date: ({{ bookinst.due_back }})
+        {% if user.is_staff %}<span class="ms-2"><a href="{% url 'renew-book-librarian' bookinst.id %}">Renew</a></span>{% endif %} or <a href="{% url 'book-return' bookinst.book.id %}">Return now</a>
       </li>
       {% else %}
       <p>I don't have such permission</p>
