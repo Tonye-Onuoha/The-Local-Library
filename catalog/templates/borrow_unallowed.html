@@ -2,10 +2,14 @@
 
 {% block content %}
 <div class="container p-5 mt-5 mb-5">
-  {% if warning == 'limit' %}
-  <h1 class="text-center">Borrow Limit Reached</h1>
+  {% if warning == 'borrowed limit' %}
+  <h1 class="text-center text-danger">Borrow Limit Reached</h1>
+  {% elif warning == 'books due' %}
+  <h1 class="text-center text-danger">Book Loan Expired</h1>
+  {% elif warning == 'loaned before' %}
+  <h1 class="text-center text-danger">Book Loan Exists</h1>
   {% else %}
-  <h1 class="text-center">Book Loan Expired</h1>
+  <h1 class="text-center text-danger">Reservation Limit Reached</h1>
   {% endif %}
   <div class="message p-5 border rounded">
     {% if collection %}
@@ -13,11 +17,11 @@
     <ul>
       {% for item in collection %}
       <br>
-      <li>{{ item.book }}</li>
+      <li><a href="{% url 'book-detail' item.book.id %}">{{ item.book }}</a></li>
       {% endfor %}
     </ul>
     <br>
-    <p><strong>Note: You cannot borrow any more books until the book(s) mentioned above has/have been returned.</strong></p>
+    <p><strong>Note: You cannot borrow/reserve any more books until the book(s) mentioned above has/have been returned.</strong></p>
     {% else %}
     <p class="text-center">{{ message }}</p>
     {% endif %}

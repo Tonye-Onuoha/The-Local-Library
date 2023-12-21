@@ -50,6 +50,7 @@ def index(request):
 	return render(request, 'index.html', context=context)
 
 def sign_up(request):
+	"""View function user registration."""
 	if request.method == 'POST':
 		form = UserCreationForm(request.POST)
 		if form.is_valid():
@@ -68,6 +69,7 @@ def sign_up(request):
 
 
 class BookListView(LoginRequiredMixin,ListView):
+	"""View function to retrieve list of all books."""
 	model = Book
 	template_name = 'book_list.html'
 	paginate_by = 9
@@ -92,6 +94,7 @@ class BookListView(LoginRequiredMixin,ListView):
 
 @login_required
 def book_detail(request,pk):
+	"""View function to retrieve specific details of each book."""
 	book = Book.objects.get(id=pk)
 	if request.method == 'POST':
 		form = BookReviewForm(request.POST)
@@ -111,33 +114,21 @@ def book_detail(request,pk):
 class AuthorListView(LoginRequiredMixin,ListView):
 	model = Author
 	template_name = 'author_list.html'
-	paginate_by = 10
+	paginate_by = 9
 
 class AuthorDetailView(LoginRequiredMixin,DetailView):
 	model = Author
 	template_name = 'author_detail.html'
 
-class AuthorCreate(CreateView):
-	model = Author
-	fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
-	initial = {'date_of_death': '11/06/2020'}
-	template_name = 'author_form.html'
-
-class AuthorUpdate(UpdateView):
-	model = Author
-	fields = '__all__' # Not recommended (potential security issue if more fields added)
-	template_name = 'author_form.html'
-
-class AuthorDelete(DeleteView):
-	model = Author
-	template_name = 'author_confirm_delete.html'
-	success_url = reverse_lazy('authors')
-
 def review_delete(request,pk):
+	"""View function to delete reviews of each book."""
 	review = get_object_or_404(BookReview, id=pk)
 	if request.method == 'POST':
-		review.delete()
-		return redirect('books')
+		if review.user == request.user:
+			review.delete()
+			return redirect(reverse('book-detail',args=[str(review.book.id)]))
+		else:
+			raise PermissionDenied
 	else:
 		context = {'post':review}
 		
@@ -145,8 +136,11 @@ def review_delete(request,pk):
 
 @login_required
 def book_return(request,id):
+	"""View function to return copies of books."""
 	book = Book.objects.get(pk=id)
-	book_instance = BookInstance.objects.get(book=book,borrower=request.user,status='o')
+	books_borrowed = BookInstance.objects.filter(book=book,borrower=request.user,status='o').first()
+	books_reserved = BookInstance.objects.filter(book=book,borrower=request.user,status='r').first()
+	book_instance = books_borrowed or books_reserved
 	if request.method == 'POST':
 		if request.user == book_instance.borrower:
 			book_instance.borrower = None
@@ -162,22 +156,25 @@ def book_return(request,id):
 		return render(request,'confirm_return.html',context)
 
 class GenreListView(LoginRequiredMixin, ListView):
+	"""View function to retrieve list of genres."""
 	model = Genre
 	template_name = 'genre_list.html'
+	paginate_by = 10
 
 class GenreDetailView(LoginRequiredMixin, DetailView):
 	model = Genre
 	template_name = 'genre_detail.html'
 
 class CopyListView(LoginRequiredMixin, ListView):
+	"""View function to retrieve book instance copies."""
 	model = BookInstance
 	template_name = 'copy_list.html'
+	paginate_by = 10
 
 class LoanedBooksByUserListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
 	"""Generic class-based view listing books on loan to current user."""
 	model = BookInstance
 	template_name = 'bookinstance_list_borrowed_user.html'
-	paginate_by = 10
 	permission_required = 'catalog.can_mark_returned' # field attributes used by class-based views to check for permissions
 	
 	def get_queryset(self):
@@ -186,14 +183,25 @@ class LoanedBooksByUserListView(LoginRequiredMixin,PermissionRequiredMixin,ListV
 			.filter(status__exact='o')
 			.order_by('due_back')
 		)
+	
+	def get_context_data(self,**kwargs):
+		data = BookInstance.objects.filter(borrower=self.request.user,status='r')
+		context = super().get_context_data(**kwargs)
+		context['reserved_books'] = data
+		return context
 
 class LoanedBooksByAllUsersListView(LoginRequiredMixin,PermissionRequiredMixin,ListView):
+	"""Generic class-based view listing all books on loan."""
 	model = BookInstance
 	template_name = 'librarians_all_books.html'
 	permission_required = 'catalog.can_mark_returned'
+	paginate_by = 10
 	
 	def get_queryset(self):
-		return BookInstance.objects.filter(status='o').order_by('book__title')
+		if self.request.user.is_superuser:
+			return BookInstance.objects.filter(status='o').order_by('book__title')
+		else:
+			raise PermissionDenied
 
 @login_required
 @permission_required('catalog.can_mark_returned', raise_exception=True)
@@ -219,19 +227,23 @@ def renew_book_librarian(request, pk):
 		# If this is a GET (or any other method) create the default form.
 	else:
 		proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-		form = RenewBookForm(initial={'renewal_date': proposed_renewal_date})
+		form = RenewBookForm()
 
 	context = {
 		'form': form,
 		'book_instance': book_instance,
 	}
 	
-	return render(request, 'book_renew_librarian.html', context)
+	if request.user.is_superuser:
+		return render(request, 'book_renew_librarian.html', context)
+	else:
+		raise PermissionDenied
 
 @login_required
 @permission_required('catalog.can_mark_returned', raise_exception=True)
 def book_borrow(request,pk):
-	book = Book.objects.get(id=pk)
+	"""View function to borrow or reserve specific copies of each book."""
+	book = get_object_or_404(Book,pk=pk)
 	message = None
 	collection = None
 	if request.method == 'POST':
@@ -241,7 +253,7 @@ def book_borrow(request,pk):
 				count += 1
 		if count == 3:
 			message = "You have already reached your borrowing limit - **3 books**"
-			warning = "limit"
+			warning = "borrowed limit"
 		else:
 			collection = []
 			for books in BookInstance.objects.filter(status__exact='o'):
@@ -249,25 +261,63 @@ def book_borrow(request,pk):
 					collection.append(books)
 			if collection:
 				message = "You are yet to return the following books:"
-				warning = "books_due"
+				warning = "books due"
 			else:
+				post = request.POST.copy()
+				post['book'] = book.title
+				request.POST = post
 				form = BookBorrowForm(request.POST)
 				if form.is_valid():
 					action = form.cleaned_data['action']
 					bookinstance = BookInstance.objects.filter(book__title=book.title).filter(status__exact='a').first()
 					if bookinstance:
 						if action == 'borrow':
-							bookinstance.due_back = form.cleaned_data['return_date']
-							bookinstance.borrower = request.user
-							bookinstance.status = 'o'
-							bookinstance.save()
+							reserved_book = BookInstance.objects.filter(book=book,borrower=request.user,status='r').first()
+							if reserved_book and reserved_book.book.title == bookinstance.book.title:
+								reserved_book.due_back = form.cleaned_data['return_date']
+								reserved_book.borrower = request.user
+								reserved_book.status = 'o'
+								reserved_book.save()
+							else:
+								loaned_book = BookInstance.objects.filter(book=book,borrower=request.user,status='o').first()
+								if loaned_book:
+									message = "You have already loaned a copy of this book."
+									warning = "loaned before"
+									context = {'message':message,'warning':warning}
+									return render(request, 'borrow_unallowed.html', context)
+								else:
+									bookinstance.due_back = form.cleaned_data['return_date']
+									bookinstance.borrower = request.user
+									bookinstance.status = 'o'
+									bookinstance.save()
 						elif action == 'reserve':
-							bookinstance.borrower = request.user
-							bookinstance.status = 'r'
-							bookinstance.save()
+							reserved_books = 0
+							for reserved in BookInstance.objects.filter(borrower=request.user,status='r'):
+								reserved_books += 1
+							if reserved_books:
+								message = "Limit reached - You cannot reserve more than one book."
+								warning = "reservation limit"
+								context = {'message':message,'warning':warning}
+								return render(request, 'borrow_unallowed.html', context)
+							else:
+								loaned_book = BookInstance.objects.filter(book=book,borrower=request.user,status='o').first()
+								if loaned_book:
+									message = "You already have a copy of this book."
+									warning = "loaned before"
+									context = {'message':message,'warning':warning}
+									return render(request, 'borrow_unallowed.html', context)
+								else:
+									bookinstance.due_back = form.cleaned_data['return_date']
+									bookinstance.borrower = request.user
+									bookinstance.status = 'r'
+									bookinstance.save()
 						if action == 'borrow':
-							messages.success(request,f'You have successfully borrowed a copy of "{bookinstance.book.title}"')
-							return redirect(reverse('book-borrow',args=[str(book.id)]))
+							if reserved_book and reserved_book.book.title == bookinstance.book.title:
+								messages.success(request,f'You have successfully borrowed your reserved copy of "{reserved_book.book.title}"')
+								return redirect(reverse('book-borrow',args=[str(book.id)]))
+							else:
+								messages.success(request,f'You have successfully borrowed a copy of "{bookinstance.book.title}"')
+								return redirect(reverse('book-borrow',args=[str(book.id)]))
 						else:
 							messages.success(request,f'You have successfully reserved a copy of "{bookinstance.book.title}"')
 							return redirect(reverse('book-borrow',args=[str(book.id)]))
@@ -278,7 +328,6 @@ def book_borrow(request,pk):
 	else:
 		form = BookBorrowForm(initial={'book':book.title})
 		
-	context={'form':form}
 
 	if collection:
 		context = {'message':message,'warning':warning,'collection':collection}
@@ -286,5 +335,7 @@ def book_borrow(request,pk):
 	elif message:
 		context = {'message':message,'warning':warning}
 		return render(request, 'borrow_unallowed.html', context)
+	
+	context={'form':form}
 	
 	return render(request, 'book_borrow_form.html', context=context)

@@ -8,6 +8,7 @@ from datetime import date
 # Create your models here.
 class Genre(models.Model):
 	"""Model representing a book genre."""
+	
 	name = models.CharField(max_length=200, help_text='Enter a book genre (e.g. Science Fiction)')
 	
 	def get_absolute_url(self):
@@ -19,6 +20,7 @@ class Genre(models.Model):
 
 class Book(models.Model):
 	"""Model representing a book (but not a specific copy of a book)."""
+
 	title = models.CharField(max_length=200)
 	# Foreign Key used because book can only have one author, but authors can have multiple books
     # Author is a string rather than an object because it hasn't been declared yet in the file
@@ -51,6 +53,7 @@ class Book(models.Model):
 		
 class BookInstance(models.Model):
 	"""Model representing a specific copy of a book (i.e. that can be borrowed from the library)."""
+
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, help_text='Unique ID for this particular book across whole library')
 	book = models.ForeignKey(Book, on_delete=models.RESTRICT, null=True)
 	imprint = models.CharField(max_length=200)
@@ -88,6 +91,7 @@ class BookInstance(models.Model):
 	
 class Author(models.Model):
 	"""Model representing an author."""
+
 	first_name = models.CharField(max_length=100)
 	last_name = models.CharField(max_length=100)
 	date_of_birth = models.DateField(null=True, blank=True)
@@ -107,6 +111,8 @@ class Author(models.Model):
 		return f'{self.last_name}, {self.first_name}'
 	
 class BookReview(models.Model):
+	"""Model representing an reviews for each book."""
+
 	review = models.TextField(help_text='Please kindly leave a review',max_length=150,blank=False)
 	book = models.ForeignKey(Book,on_delete=models.CASCADE,blank=False)
 	date = models.DateTimeField(blank=False,auto_now_add=True)

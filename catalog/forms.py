@@ -5,7 +5,7 @@ import datetime
 from .models import BookReview
 
 class RenewBookForm(forms.Form):
-    renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).")
+    renewal_date = forms.DateField(help_text="Enter a date between now and 4 weeks (default 3).",widget=forms.TextInput(attrs={'placeholder':'YY-MM-DD'}))
 
     def clean_renewal_date(self):
         data = self.cleaned_data['renewal_date']
@@ -22,13 +22,13 @@ class RenewBookForm(forms.Form):
         return data
 
 class BookReviewForm(forms.Form):
-    review = forms.CharField(widget=forms.Textarea(),help_text='Please kindly leave a review',label="",max_length=150)
+    review = forms.CharField(widget=forms.Textarea(),help_text='Please kindly leave a review about this book.',label="",max_length=150)
 
 class BookBorrowForm(forms.Form):
     CHOICES = (('borrow','Borrow a book'),('reserve','Reserve a book'))
-    book = forms.CharField(help_text='Enter a book',widget=forms.TextInput(attrs={'class':'borrow-form-field mb-4 p-1'}))
-    return_date = forms.DateField(help_text='Enter the date to be returned',widget=forms.TextInput(attrs={'class':'borrow-form-field mb-4 p-1','placeholder':'MM/DD/YY'}))
-    action = forms.CharField(label="What do you want to do ?", widget=forms.RadioSelect(choices=CHOICES))
+    book = forms.CharField(help_text='Enter a book',widget=forms.TextInput(attrs={'class':'borrow-form-field mb-4 p-1','disabled':'True'}))
+    return_date = forms.DateField(help_text='Enter the date to be returned/unreserved',widget=forms.TextInput(attrs={'class':'borrow-form-field mb-4 p-1','placeholder':'MM/DD/YY'}))
+    action = forms.CharField(label='What do you want to do ?', widget=forms.RadioSelect(choices=CHOICES))
 
     def clean_return_date(self):
         data = self.cleaned_data['return_date']

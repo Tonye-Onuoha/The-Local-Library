@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container p-3 border">
+<div class="container p-3">
 	{% if messages %}
   	{% for message in messages %}
   	<div class="alert alert-{{message.tags}} text-center p-1">
@@ -9,7 +9,7 @@
   	</div>
   	{% endfor %}
   	{% endif %}
-  <h1 class="text-center mt-2 display-6">Borrowed books</h1>
+  <h2 class="text-center mt-2 display-6">Borrowed books</h2>
   <div class="border rounded mt-3 mb-3 p-4" style="min-height: 300px;display: flex;justify-content: center;align-items: center;">
     {% if bookinstance_list %}
     <ul class="mt-5 mb-5 p-3" style="list-style-type: square;">
@@ -17,7 +17,10 @@
       {% if perms.catalog.can_mark_returned %}
       <li class="{% if bookinst.is_overdue %}text-danger{% endif %} mb-3">
         <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> - return date: ({{ bookinst.due_back }})
-        {% if user.is_staff %}<span class="ms-2"><a href="{% url 'renew-book-librarian' bookinst.id %}">Renew</a></span>{% endif %} or <a href="{% url 'book-return' bookinst.book.id %}">Return now</a>
+        {% if user.is_staff %}<span class="ms-2"><a href="{% url 'renew-book-librarian' bookinst.id %}">Renew</a></span><span class="text-dark"> or </span><a href="{% url 'book-return' bookinst.book.id %}">Return now</a>
+		{% else %}
+		<a href="{% url 'book-return' bookinst.book.id %}">Return now</a>
+		{% endif %}
       </li>
       {% else %}
       <p>I don't have such permission</p>
@@ -28,5 +31,18 @@
       <p>There are no books borrowed.</p>
     {% endif %}
   </div>
+  {% if reserved_books %}
+  <h2 class="text-center mt-2 display-6">Reserved Books</h2>
+  <div class="border rounded mt-3 mb-3 p-4" style="display: flex;justify-content: center;align-items: center;">
+	  <ul class="mt-5 mb-5 p-3" style="list-style-type: square;">
+		{% for bookinst in reserved_books %}
+		<li class="mb-3">
+        <a href="{% url 'book-detail' bookinst.book.pk %}">{{ bookinst.book.title }}</a> - reservation expiration date: ({{ bookinst.due_back }})
+		<a href="{% url 'book-borrow' bookinst.book.id %}">Borrow this book</a> or <a href="{% url 'book-return' bookinst.book.id %}">Return now</a>
+      	</li>
+		{% endfor %}
+	  </ul>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

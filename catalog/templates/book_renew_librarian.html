@@ -6,14 +6,14 @@
 	<h2 class="text-center mt-2">Renew: {{ book_instance.book.title }}</h2>
 	<div class="border rounded mt-2 mb-2" style="min-height: 350px;display: flex;justify-content: center;align-items: center;">
 		<div>
-			<p>Borrower: {{ book_instance.borrower }}</p>
-  			<p {% if book_instance.is_overdue %} class="text-danger"{% endif %} >Due date: {{ book_instance.due_back }}</p>
+			<p><span class="text-info">Borrower:</span> {{ book_instance.borrower }}</p>
+  			<p {% if book_instance.is_overdue %} class="text-danger"{% endif %} ><span class="text-info">Due date:</span> {{ book_instance.due_back }}</p>
 			<form action="" method="post">
     		{% csrf_token %}
     		<table>
     		{{ form|crispy }}
     		</table>
-    		<input type="submit" value="Submit" class="btn btn-primary">
+    		<input type="submit" value="Submit" class="btn btn-info text-white">
   			</form>
 		</div>
 	</div>

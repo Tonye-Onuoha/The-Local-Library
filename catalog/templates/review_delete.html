@@ -9,7 +9,7 @@
       {% csrf_token %}
       <div class="review-delete-buttons" style="display:flex;justify-content:space-around;">
         <input type="submit" name="submit" value="Yes" class="btn btn-danger">
-        <a href="{% url 'books' %}" class="btn btn-info text-white">No</a>
+        <a href="{% url 'book-detail' post.book.id %}" class="btn btn-info text-white">No</a>
       </div>
     </form>
   </div>

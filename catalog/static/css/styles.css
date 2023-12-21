@@ -70,7 +70,6 @@ a:link {
 	grid-template-columns: 1fr 4fr 1fr;
 	grid-template-rows: 1fr 1fr;
 	grid-column-gap: 5px;
-	grid-row-gap: 1%;
 	grid-template-areas:
 		"user books highest-rated"
 		"recommended books highest-rated";
@@ -84,21 +83,23 @@ a:link {
 
 .user {
 	grid-area: user;
+	height: 620px;
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: auto;
 	grid-template-rows: 50% 50%;
 }
 
 .recently-borrowed {
 	display: grid;
 	grid-template-columns: 1fr;
-	grid-template-rows: 1fr 2fr 1fr;
+	grid-template-rows: 15% 60% 25%;
 	place-items: center;
 	background-color: #B7A1A6;
+	height: 100%;
 }
 
 .recently-borrowed > #recent-book:hover {
-	box-shadow: 1px 1px 3px 3px grey;
+	box-shadow: 1px 1px 5px 5px darkgray;
 }
 
 .booklist .user-section div > a {
@@ -125,6 +126,7 @@ a:link {
 
 .recommended {
 	grid-area: recommended;
+	height: 620px;
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: 2fr 4fr 2fr;
@@ -133,17 +135,17 @@ a:link {
 }
 
 .recommended > #recommended-book:hover {
-	box-shadow: 1px 1px 3px 3px grey;
+	box-shadow: 1px 1px 5px 5px gray;
 }
 .highest-rated {
 	grid-area: highest-rated;
 	display: grid;
 	grid-template-columns: auto;
-	grid-template-rows: 49.5% 49.5%;
-	grid-row-gap: 1%;
+	grid-template-rows: 620px 620px;
 }
 
 .latest-book {
+	height: 620px;
 	display: grid;
 	grid-template-columns: auto;
 	grid-template-rows: 2fr 4fr 2fr;
@@ -152,10 +154,11 @@ a:link {
 }
 
 .latest-book > #new-book:hover {
-	box-shadow: 1px 1px 3px 3px darkgray;
+	box-shadow: 1px 1px 5px 5px gray;
 }
 
 .fan-favorite {
+	height: 620px;
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: 2fr 4fr 2fr;
@@ -164,7 +167,7 @@ a:link {
 }
 
 .fan-favorite > #fav-book:hover {
-	box-shadow: 1px 1px 3px 3px darkgray;
+	box-shadow: 1px 1px 5px 5px gray;
 }
 
 /* Book-Detail View */
@@ -219,7 +222,7 @@ a:link {
 .author-list {
 	display: grid;
 	grid-template-columns: repeat(3, 33.33%);
-	grid-template-rows: repeat(4, 360px);
+	grid-template-rows: repeat(3, 360px);
 	grid-auto-rows: 360px;
 	grid-gap: 5px;
 }
