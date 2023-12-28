@@ -1,0 +1,274 @@
+html {
+	padding: 0;
+}
+
+body {
+	font-family: 'Rajdhani', sans-serif;
+	font-size: 20px;
+}
+
+header {
+	color: white;
+	padding: 3%;
+	font-size: 32px;
+	font-weight: 500;
+	text-align: center;
+}
+
+.nav-content {
+	display: flex;
+	width: 100%;
+	height: 62px;
+	align-items: center;
+}
+
+.nav-content > a {
+	flex-basis: 150px;
+	flex-grow: 1;
+	padding: 12px;
+	margin: 5px;
+	text-align: center;
+	text-decoration: none;
+	color: white;
+}
+
+.paginate > a {
+	width: 100px;
+	height: 40px;
+}
+
+#home {
+	color: white;
+	background-color: #004369;
+	outline: 1px solid white;
+}
+
+a:link {
+	text-decoration: none;
+}
+
+.nav-content a:hover:not(#home) {
+	background-color: dimgray;
+	outline: 1px solid white;
+	color: white;
+}
+
+.login {
+	padding: 5%;
+}
+
+.logout {
+	padding: 10.8%;
+}
+
+/* Book-List View */
+
+.booklist {
+	width: 100%;
+	height: 1240px;
+	display: grid;
+	grid-template-columns: 1fr 4fr 1fr;
+	grid-template-rows: 1fr 1fr;
+	grid-column-gap: 5px;
+	grid-template-areas:
+		"user books highest-rated"
+		"recommended books highest-rated";
+}
+
+.booklist-info {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+.user {
+	grid-area: user;
+	height: 620px;
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: 50% 50%;
+}
+
+.recently-borrowed {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 15% 60% 25%;
+	place-items: center;
+	background-color: #B7A1A6;
+	height: 100%;
+}
+
+.recently-borrowed > #recent-book:hover {
+	box-shadow: 1px 1px 5px 5px darkgray;
+}
+
+.booklist .user-section div > a {
+	padding: 12px;
+}
+
+.booklist .user-section div > a:hover {
+	background-color: #212121;
+	outline: 1px solid white;
+}
+
+.books {
+	grid-area: books;
+	display: grid;
+	grid-template-columns: repeat(auto-fill,minmax(283px,1fr));
+	grid-auto-rows: 400px;
+	grid-column-gap: 1%;
+	grid-row-gap: 20px;
+}
+
+.book-item:hover {
+	box-shadow: 1px 1px 3px 3px lightgrey;
+}
+
+.recommended {
+	grid-area: recommended;
+	height: 620px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 2fr 4fr 2fr;
+	place-items: center;
+	background-color: #8F916B;
+}
+
+.recommended > #recommended-book:hover {
+	box-shadow: 1px 1px 5px 5px gray;
+}
+.highest-rated {
+	grid-area: highest-rated;
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: 620px 620px;
+}
+
+.latest-book {
+	height: 620px;
+	display: grid;
+	grid-template-columns: auto;
+	grid-template-rows: 2fr 4fr 2fr;
+	background-color: #B1D4E0;
+	place-items: center;
+}
+
+.latest-book > #new-book:hover {
+	box-shadow: 1px 1px 5px 5px gray;
+}
+
+.fan-favorite {
+	height: 620px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 2fr 4fr 2fr;
+	place-items: center;
+	background-color: lightgray;
+}
+
+.fan-favorite > #fav-book:hover {
+	box-shadow: 1px 1px 5px 5px gray;
+}
+
+/* Book-Detail View */
+.book-detail {
+	display: grid;
+	grid-template-columns: 2fr 1fr 3fr;
+	grid-template-rows: 600px auto;
+	grid-gap: 5px;
+	grid-template-areas:
+		"book-info book-summary book-summary"
+		"reviews reviews copies";
+}
+
+.book-info {
+	grid-area: book-info;
+}
+
+.book-info > .information {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+.book-summary {
+	grid-area: book-summary;
+}
+
+.reviews {
+	grid-area: reviews;
+	display: grid;
+	grid-template-rows: auto 800px;
+	grid-auto-columns: 1fr;
+}
+
+.review-section {
+	overflow: auto;
+}
+
+.copies {
+	grid-area: copies;
+}
+
+.borrow-form-field {
+	display: inline-block;
+	width: 100%;
+	border: 1px solid #9FA6B2;
+	border-radius: 5px;
+	font-weight: 300;
+}
+
+/* Author-List View */
+.author-list {
+	display: grid;
+	grid-template-columns: repeat(3, 33.33%);
+	grid-template-rows: repeat(3, 360px);
+	grid-auto-rows: 360px;
+	grid-gap: 5px;
+}
+
+.author-list > a:hover {
+	box-shadow: 1px 1px 3px 3px lightgray;
+}
+
+/* Author Details Page */
+.author-details {
+	display: grid;
+	grid-template-columns: 1fr 3fr;
+	grid-template-rows: 400px auto;
+	grid-gap: 5px;
+	grid-template-areas:
+		"author-info author-bio"
+		"author-books author-books";
+}
+
+.author-info {
+	grid-area: author-info
+}
+
+.author-bio {
+	grid-area: author-bio;
+	display: grid;
+	grid-template-rows: 20% 80%;
+}
+
+.author-books {
+	grid-area: author-books;
+	display: grid;
+	grid-template-columns: repeat(5, 20%);
+	grid-template-rows: 50px;
+	grid-auto-rows: 300px;
+	grid-gap: 10px;
+	padding: 1%;
+}
+
+.author-books > a:hover {
+	box-shadow: 1px 1px 3px 3px lightgray;
+}
+
+footer {
+	padding: 20px;
+	color: white;
+	text-align: center;
+	margin: 0;
+}
