@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'local_library.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+		'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'library_DB',
-		'USER': 'tonyeonuoha',
-		'PASSWORD': 'HUGOBOSS77',
+		'USER': os.environ.get('USER'),
+		'PASSWORD': os.environ.get('PASSWORD'),
 		'HOST': 'library-db.c5sk0gsccpf7.eu-north-1.rds.amazonaws.com',
 		'PORT': '5432'
     }
